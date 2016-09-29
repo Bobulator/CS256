@@ -1,0 +1,22 @@
+input {
+	text-align: right;
+	width: 170px;
+}
+
+button {
+	width: 170px;
+}
+
+.label {
+	color: black;
+	font-size: 90%;
+	text-align: left;
+}
+
+.top-buffer {
+	margin-top: 20px;
+}
+
+#banner {
+	background-color: #DBE9F4
+}

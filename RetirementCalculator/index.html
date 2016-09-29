@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset = "utf-8">
+		<meta name = "viewport" content = "width=device-width, initial-scale=1">
+		
+		<!-- Latest compiled and minified CSS -->
+		<link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		
+		<!-- jQuery library -->
+		<script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
+		<!-- Highcharts library -->
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script src="http://code.highcharts.com/modules/exporting.js"></script>
+		
+		<!-- Local CSS -->
+		<link rel = "stylesheet" type = "text/css" href = "style.css">
+		
+	</head>
+	
+	<body>
+		<div id = "banner" class = "container-fluid">
+			<h1 align = "center">Retirement Forecast</h1>
+			<br>
+		</div>
+		
+		<div class = "row">
+			<br>
+			
+			<!-- Left side -->
+			<div class = "col-sm-6">
+				<div id="results" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+			</div>
+			
+			<!-- Right side -->
+			<div class = "col-sm-6">
+					<div class = "row top-buffer">
+						<div class = "label col-sm-3">Year of retirement: </div>
+						<input id = "yearOfRetirement" type = "number" value = "2050">
+					</div>
+					
+					<div class = "row top-buffer">
+						<div class = "label col-sm-3">Weekly Savings: </div>
+						<input id = "weeklySavings" type = "number" value = "100">
+					</div>
+					
+					<div class = "row top-buffer">
+						<div class = "label col-sm-3">Current Savings: </div>
+						<input id = "currentSavings" type = "number" value = "1000">
+					</div>
+					
+					<div class = "row top-buffer">
+						<div class = "offset4">
+							<button id = "getForecastButton" class = "btn btn-primary col-sm-offset-3">Get Forecast</button>
+						</div>
+					</div>
+			</div>
+		</div>
+	</body>
+	
+	<!-- Local script -->
+	<script src = "./script.js"></script>
+</html>
