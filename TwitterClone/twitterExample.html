@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<head>
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+  <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  
+  <!-- Local CSS -->
+  <link rel = "stylesheet" type = "text/css" href = "style.css">
+  
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyBDgHk3_m-vqyUbTGIqgCZ8qAb-CoY5ID4",
+      authDomain: "luminous-torch-6850.firebaseapp.com",
+      databaseURL: "https://luminous-torch-6850.firebaseio.com",
+      storageBucket: "luminous-torch-6850.appspot.com",
+      messagingSenderId: "825487892602"
+    };
+    
+    firebase.initializeApp(config);
+    
+    // Get a reference to the database service
+    var database = firebase.database();
+    var chattyRef = database.ref("chatty/");
+
+    
+    // Write some data
+    //chattyRef.push({ 
+    //  sender: "deuce",
+    //  message: "this is NOT a test"
+    //});
+
+    
+    //Read some data
+    chattyRef.on('child_added', function(data) {
+	  var sender = data.val().sender.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	  var message = data.val().message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      $("#tweets").prepend("<div class = \"well\"><b>" + sender + " </b><p>" + message + "</p></div>");
+    });
+
+    function addTweet(sender, message) {
+	  var sendObject = {
+        sender: sender,
+        message: message,
+		inReplyTo: "",
+		timeStamp: Date.now()
+      };
+	  
+	  console.log(sendObject);
+	  
+      chattyRef.push(sendObject);
+    }
+
+    $(document).ready(function () {
+      $("#sendTweet").click(function () {
+        var sender = $("#sender").val();
+		var message = $("#message").val();
+		
+		console.log("button clicked with " + sender + ", " + message);
+		
+		addTweet(sender, message);
+      });
+    });
+
+  </script>
+</head>
+
+<body>
+  <div id = "mainContainger" class = "row col-sm-offset-4">
+    <div class = "row">
+	  <div class = "row" id = "senderRow">
+        <input id = "sender" class = "col-sm-1" placeholder = "Username">
+	  </div>
+	
+	  <div class = "row" id = "messageRow">
+	    <input id = "message" class = "col-sm-2" placeholder = "Type your message here...">
+	  </div>
+	
+	  <div class = "row" id = "buttonRow">
+	    <button id = "sendTweet" class = "btn btn-primary">Send</button>
+	  </div>
+	</div>
+	
+    <div id = "tweets" class = "col-sm-4"></div>
+  </div>
+</body>
