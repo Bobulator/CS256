@@ -1,0 +1,44 @@
+body {
+  background-color: #FFEACC;
+}
+
+.buttonsContainer {
+  overflow: hidden;
+}
+
+.inputButton {
+  width: 120px;
+  height: 30px;
+  padding-top: 7px;
+  
+  border-radius: 10px;
+
+  border-size: 1px;
+  border-style: solid;
+  border-color: red;
+
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  box-shadow: 5px 5px 5px grey; 
+  
+  display: table-cell;
+  font-size: 20px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.inputButton:hover {
+  cursor: pointer;
+  box-shadow: 5px 5px 0px grey;
+}
+
+.inputButton:active {
+  margin-left: 5px;
+  margin-top: 5px;
+  box-shadow: 5px 5px 2px #FFEACC;
+}
+
+#responseText {
+  font-size: 30px;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/JavaScript">
+      
+      var helloText = "Hello there";
+      
+      function getDivElement() {
+        return document.getElementById("responseText");
+      }
+
+      function getFont(font) {
+        return "normal normal 30px " + font;
+      }
+
+      function redTimes() {
+        var responseText = getDivElement();
+        responseText.style.color = "red";
+        responseText.style.font = getFont("times");
+      }
+
+      function green() {
+        var responseText = getDivElement();
+        responseText.style.color = "green";
+      }
+
+      function blueArial() {
+        var responseText = getDivElement();
+        responseText.style.color = "blue";
+        responseText.style.font = getFont("arial");
+      }
+
+      function blackHello() {
+        var responseText = getDivElement();
+        responseText.style.color = "black";
+        responseText.innerHTML = helloText;
+      }
+
+    </script>
+    
+    <link rel="stylesheet" type="text/css" href="style3.css">
+  </head>
+
+  <body>
+    <h1>Testing Javascript</h1>
+    
+    <div class="buttonsContainer">
+      
+      <div class="inputButton" onclick="redTimes()">Red Times</div>
+      
+      <div class="inputButton" onclick="green()">Green</div>
+      
+      <div class="inputButton" onclick="blueArial()">Blue Arial</div>
+      
+      <div class="inputButton" onclick="blackHello()">Black Hello</div>
+    </div>
+    
+      <p id="responseText">This is some text to be displayed and changed</p>
+  </body>
+</html>
