@@ -1,0 +1,5 @@
+[ ] Add dates to each message
+[ ] Implement delete
+[ ] Implement reply-to
+[ ] Show the last 20 messages on start
+[ ] Make text boxes longer (or make the default message font smaller)
