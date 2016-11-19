@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var Question = new Schema({
   category: String,
   type: String,
+  question: String,
   possibleAnswers: [String],
   correctAnswer: Number,
   difficulty: { type: Number, min: 0, max: 10 }
