@@ -6,10 +6,12 @@ var Question = require("../models/question.js");
 mongoose.connect("mongodb://localhost/codesage");
 
 module.exports = {
-
   loginUser: loginUser,
   addUser: addUser,
   getQuestion: getQuestion,
+  getQuestions: getQuestions,
+  getCategories: getCategories,
+  getProfileData: getProfileData,
   addQuestion: addQuestion
 }
 
@@ -66,11 +68,121 @@ function getQuestion(categories, callback) {
 
   Question.find({ category: { $in: categories } }, function (error, results) {
     if (error) {
-      console.log("is bad");
+      console.error(error);
+      callback(false);
+
     } else {
-      console.log(results);
+
+      // Retrieve random question from query
+      var result = results[Math.floor(Math.random() * results.length)];
+      callback(result);
+    }
+  });
+}
+
+function getQuestions(categories, callback) {
+  console.log("in getQuestions");
+
+  Question.find({ category: { $in: categories } }, function (error, results) {
+    
+    if (error) {
+      
+      console.error(error);
+      callback(false);
+
+    } else {
+      
       callback(results);
     }
+  });
+}
+
+function getCategories(callback) {
+  console.log("in getCategories");
+
+  Question.distinct("category", function (error, results) {
+    
+    if (error) {
+    
+      console.error(error);
+      callback(false);
+
+    } else {
+
+      callback(results);
+    }
+  });
+
+}
+
+function getProfileData(username, callback) {
+  console.log("in getProfileData");
+
+  User.findOne({ username: username }, function (error, user) {
+    var profileData = {};
+    
+    if (error) {
+      
+      console.error(error);
+      callback(false);
+
+    } else {
+
+      profileData.categoryPercentages = [];  
+      profileData.mostRecentCategory = user.mostRecentCategory;
+      
+        
+        var aggregate = [
+          
+          { 
+            $group: {
+
+              _id: "$category",
+              count: { $sum: 1 }
+          
+            } 
+          }
+        
+        ];
+        
+        Question.aggregate(aggregate, function (error, result) {
+          console.log("aggregating");
+
+          if (error) {
+            console.error(error);
+            callback(false);
+          
+          } else {
+            
+            for (var i = 0; i < result.length; i++) {
+              obj = result[i];
+              
+              var matchingCategory = false;
+              for (var j = 0; j < user.questionsAnswered.length; j++) {
+                
+                var answeredQuestion = user.questionsAnswered[j];
+                
+                if (answeredQuestion.category === obj._id) {
+                  
+                  matchingCategory = true;
+                  var percentage = (answeredQuestion.correctlyAnswered * 100) / obj.count;
+                  profileData.categoryPercentages.push({ category: obj._id, percentage: percentage });
+                
+                  break;
+                }
+              }
+
+              if (!matchingCategory) {
+                profileData.categoryPercentages.push({ category: obj._id, percentage: 0 });
+              }
+            }
+
+            callback(profileData);
+          }
+
+        });
+    }
+
   });
 }
 
@@ -79,4 +191,5 @@ function addQuestion(question, callback) {
 
   new Question(question).save();
   callback(true);
-};
+}
+

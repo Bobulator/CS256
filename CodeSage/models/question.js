@@ -8,7 +8,8 @@ var Question = new Schema({
   question: String,
   possibleAnswers: [String],
   correctAnswer: Number,
-  difficulty: { type: Number, min: 0, max: 10 }
+  difficulty: { type: Number, min: 0, max: 10 },
+  tryItLink: String
 });
 
 module.exports = mongoose.model('Question', Question);
