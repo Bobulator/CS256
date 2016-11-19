@@ -20,7 +20,14 @@ function loginUser(username, password) {
 
 function addUser(username, password) {
   var user = new User({
+    username: username,
+    password: password,
+
+    questionsAnswered: [],
     
+    profilePictuerDirectory: "",
+    mostRecentCategory: "",
+    settings: null
   });
 
   user.save();
