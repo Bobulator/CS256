@@ -24,8 +24,11 @@
     // Get a reference to the database service
     var database = firebase.database();
     var chattyRef = database.ref("chatty/");
-
     
+    // Keep track of how many tweets there are on the page
+    var tweetCount = 0;
+    var tweetLimit = 10;
+
     // Write some data
     //chattyRef.push({ 
     //  sender: "deuce",
@@ -35,32 +38,60 @@
     
     //Read some data
     chattyRef.on('child_added', function(data) {
-	  var sender = data.val().sender.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-	  var message = data.val().message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      $("#tweets").prepend("<div class = \"well\"><b>" + sender + " </b><p>" + message + "</p></div>");
+	    var key = data.key;
+      var sender = data.val().sender.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      var date = new Date(data.val().timeStamp);
+	    var message = data.val().message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+      if (!sender) {
+        sender = "Anonymous";
+      }
+      
+      $("#tweets").prepend("<div id = " + key + " class = \"well\">" + 
+                             "<b>" + sender + " </b>" + 
+                             "<span class=\"deleteTweet glyphicon glyphicon-trash pull-right\"></span>" +
+                             "<p class = \"date\">" + date.toUTCString() + "</p>" +
+                             "<p>" + message + "</p>" +   
+                           "</div>");
+      tweetCount += 1;
+
+      if (tweetCount > tweetLimit) {
+        $("#tweets").children().last().remove();
+        tweetCount -= 1;
+      }
     });
 
     function addTweet(sender, message) {
-	  var sendObject = {
+	    var sendObject = {
         sender: sender,
         message: message,
-		inReplyTo: "",
-		timeStamp: Date.now()
+		    inReplyTo: "",
+		    timeStamp: Date.now()
       };
 	  
-	  console.log(sendObject);
-	  
       chattyRef.push(sendObject);
+    }
+    
+    function removeTweet(key) {
+      chattyRef.child(key).remove();
     }
 
     $(document).ready(function () {
       $("#sendTweet").click(function () {
         var sender = $("#sender").val();
-		var message = $("#message").val();
-		
-		console.log("button clicked with " + sender + ", " + message);
-		
-		addTweet(sender, message);
+		    var message = $("#message").val();
+		    
+        if (!sender) {
+          sender = "Anonymous";
+        }
+
+		    addTweet(sender, message);
+      });
+
+      $(document).on("click", ".deleteTweet", function (e) {
+        var tweetKey = $(this).parent().attr("id");
+        removeTweet(tweetKey);
+        $(this).parent().remove();
       });
     });
 
@@ -68,14 +99,14 @@
 </head>
 
 <body>
-  <div id = "mainContainger" class = "row col-sm-offset-4">
+  <div id = "mainContainer" class = "col-sm-6 col-sm-offset-3">
     <div class = "row">
 	  <div class = "row" id = "senderRow">
-        <input id = "sender" class = "col-sm-1" placeholder = "Username">
+        <input id = "sender" class = "col-sm-4" placeholder = "Username">
 	  </div>
 	
 	  <div class = "row" id = "messageRow">
-	    <input id = "message" class = "col-sm-2" placeholder = "Type your message here...">
+	    <textarea id = "message" class = "col-sm-12" rows = 2 placeholder = "Type your message here..."></textarea>
 	  </div>
 	
 	  <div class = "row" id = "buttonRow">
@@ -83,6 +114,6 @@
 	  </div>
 	</div>
 	
-    <div id = "tweets" class = "col-sm-4"></div>
+    <div id = "tweets" class = "col-sm-12"></div>
   </div>
 </body>

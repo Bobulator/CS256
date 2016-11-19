@@ -6,6 +6,16 @@
 	background: white;
 }
 
+.date {
+  font-size: 80%;
+  color: gray;
+}
+
+.deleteTweet {
+  cursor: pointer;
+  cursor: hand;
+}
+
 #tweets {
 	margin-top: 20px;
 }
