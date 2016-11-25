@@ -6,8 +6,10 @@ var Question = new Schema({
   category: String,
   type: String,
   question: String,
-  possibleAnswers: [String],
-  correctAnswer: Number,
+  possibleAnswers: [{
+    answer: String,
+    response: String
+  }],
   difficulty: { type: Number, min: 0, max: 10 },
   tryItLink: String
 });
