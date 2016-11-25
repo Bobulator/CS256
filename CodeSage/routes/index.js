@@ -39,7 +39,7 @@ router.get('/getQuestion', function(req, res) {
 
 router.get('/getQuestions', function(req, res) {
   console.log("Received /getQuestions Request");
-  console.log("Categories: " + req.quest.categories.toStrings());
+  console.log("Categories: " + req.query.categories.toString());
 
   datalayer.getQuestions(req.query.categories, function(result) {
   
