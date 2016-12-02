@@ -12,7 +12,8 @@ module.exports = {
   getQuestions: getQuestions,
   getCategories: getCategories,
   getProfileData: getProfileData,
-  addQuestion: addQuestion
+  addQuestion: addQuestion,
+  questionAnswered: questionAnswered
 }
 
 
@@ -184,5 +185,21 @@ function addQuestion(question, callback) {
 
   new Question(question).save();
   callback(true);
+}
+
+function questionAnswered(params, callback) {
+    var username = params.username;
+    var questionId = params.questionId;
+
+    User.findOne({ username: username }, function (error, result) {
+       if (error) {
+           console.error(error);
+           callback(false);
+       } else {
+           result.questionsAnswered.push(questionId);
+           result.save();
+           callback(true);
+       }
+    });
 }
 

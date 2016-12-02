@@ -92,10 +92,24 @@ router.post('/addQuestion', function(req, res) {
     if (result) {
       res.status(200).send("OK");
     } else {
-      res.status(500).send("Something horrible happened and it was your fault");
+      res.status(500).send("Failed to add question");
     }
   });
 
+});
+
+router.post("/questionAnswered", function (req, res) {
+  console.log("in /questionAnswered");
+  console.log(req.body.username);
+  console.log(req.body.questionId);
+
+  datalayer.questionAnswered(req.body, function (result) {
+    if (result) {
+      res.status(200).send("OK");
+    } else {
+      res.status(500).send("Failed to log answered question");
+    }
+  });
 });
 
 
