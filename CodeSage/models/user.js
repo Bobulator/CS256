@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var question = require('question');
+var question = require('./question.js');
 
 
 var User = new Schema({
