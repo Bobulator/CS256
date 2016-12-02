@@ -23,7 +23,7 @@ function loginUser(username, password, callback) {
     console.log("in findOne");
     
     if (error) {
-      console.log("IS BAD");
+      console.error(error);
     }
     else {
       console.log("found user: ");
@@ -129,9 +129,11 @@ function getProfileData(username, callback) {
       callback(false);
 
     } else {
+        console.log("Successfully retrieved user data");
+
         var questionAnsweredCategoryCounts = {};
 
-        for (var i = 0; i < user.questionsAnswered; i++) {
+        for (var i = 0; i < user.questionsAnswered.length; i++) {
           var questionAnswered = user.questionsAnswered[i];
           if (!questionAnsweredCategoryCounts[questionAnswered.category]) {
             questionAnsweredCategoryCounts[questionAnswered.category] = 0

@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var question = require('./question.js');
 
 
 var User = new Schema({
@@ -9,7 +8,7 @@ var User = new Schema({
 
   questionsAnswered: [{
     type: Schema.Types.ObjectId,
-    ref: question
+    ref: "Question"
   }],
 
   profilePictureDirectory: String,  
