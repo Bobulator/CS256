@@ -8,7 +8,7 @@ var User = new Schema({
   password: String,
 
   questionsAnswered: [{
-    type: ObjectId,
+    type: Schema.Types.ObjectId,
     ref: question
   }],
 
