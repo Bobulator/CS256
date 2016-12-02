@@ -118,31 +118,35 @@ function getCategories(callback) {
 function getProfileData(username, callback) {
   console.log("in getProfileData");
 
-  User.findOne({ username: username }, function (error, user) {
-    var profileData = {};
+  User.findOne({ username: username }).populate("questionsAnswered").exec(function (error, user) {
+    var profileData = {
+        categoryPercentages: [],
+        mostRecentCategory: user.mostRecentCategory
+    };
     
     if (error) {
-      
       console.error(error);
       callback(false);
 
     } else {
+        var questionAnsweredCategoryCounts = {};
 
-      profileData.categoryPercentages = [];  
-      profileData.mostRecentCategory = user.mostRecentCategory;
-      
-        
+        for (var i = 0; i < user.questionsAnswered; i++) {
+          var questionAnswered = user.questionsAnswered[i];
+          if (!questionAnsweredCategoryCounts[questionAnswered.category]) {
+            questionAnsweredCategoryCounts[questionAnswered.category] = 0
+          }
+
+          questionAnsweredCategoryCounts[questionAnswered.category] += 1
+        }
+
         var aggregate = [
-          
           { 
             $group: {
-
               _id: "$category",
               count: { $sum: 1 }
-          
             } 
           }
-        
         ];
         
         Question.aggregate(aggregate, function (error, result) {
@@ -155,34 +159,21 @@ function getProfileData(username, callback) {
           } else {
             
             for (var i = 0; i < result.length; i++) {
-              obj = result[i];
-              
-              var matchingCategory = false;
-              for (var j = 0; j < user.questionsAnswered.length; j++) {
-                
-                var answeredQuestion = user.questionsAnswered[j];
-                
-                if (answeredQuestion.category === obj._id) {
-                  
-                  matchingCategory = true;
-                  var percentage = (answeredQuestion.correctlyAnswered * 100) / obj.count;
-                  profileData.categoryPercentages.push({ category: obj._id, percentage: percentage });
-                
-                  break;
-                }
-              }
+                var obj = result[i];
 
-              if (!matchingCategory) {
-                profileData.categoryPercentages.push({ category: obj._id, percentage: 0 });
-              }
+                if (questionAnsweredCategoryCounts[obj._id]) {
+
+                  var percentage = (questionAnsweredCategoryCounts[obj._id] * 100) / obj.count;
+                  profileData.categoryPercentages.push({ category: obj._id, percentage: percentage });
+                } else {
+                    profileData.categoryPercentages.push({ category: obj._id, percentage: 0 });
+                }
             }
 
             callback(profileData);
           }
-
         });
     }
-
   });
 }
 
